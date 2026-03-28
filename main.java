@@ -25,14 +25,26 @@ public class main {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
-            boolean stregth = false;
+            boolean[] errorsArr = logic.getError(username, password);
+            boolean stregth = logic.getStrength(username, password); // true/false
 
             if (!stregth) {
+
+                StringBuilder errors = new StringBuilder();
+
+                if (!errorsArr[0]) errors.append("- Missing uppercase letter\n");
+                if (!errorsArr[1]) errors.append("- Missing lowercase letter\n");
+                if (!errorsArr[3]) errors.append("- Missing number\n");
+                if (!errorsArr[2]) errors.append("- Missing special character\n");
+                if (!errorsArr[4]) errors.append("- Must be at least 8 characters\n");
+                if (!errorsArr[5]) errors.append("- Should not contain username\n");
 
                 String[] suggestion = Suggest.getSuggestions(username, password);
 
                 JOptionPane.showMessageDialog(null,
-                        "Weak Password ❌\n\nTry these:\n\n"
+                        "Weak Password ❌\n\nIssues:\n"
+                        + errors.toString()
+                        + "\nSuggestions:\n"
                         + "1. " + suggestion[0] + "\n"
                         + "2. " + suggestion[1] + "\n"
                         + "3. " + suggestion[2],
@@ -46,6 +58,6 @@ public class main {
                         "Success",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        }
+                    }
     }
 }

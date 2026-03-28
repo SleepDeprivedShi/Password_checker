@@ -1,5 +1,3 @@
-package Logic;
-
 import java.util.*;
 
 public class logic {
