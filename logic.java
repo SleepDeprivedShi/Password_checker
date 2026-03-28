@@ -1,27 +1,33 @@
 package Logic;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class logic {
-
+	
+	static boolean upp = false;
+	static boolean low = false;
+	static boolean sp = false;
+	static boolean num = false;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+	
+	}
+	public static boolean[] getError(String name, String pass) {
+		char_check(pass);
+		boolean[] ans= {upp,low,sp,num,length_check(pass),username(pass,name)};
+		return ans;
+	}
 
-		Scanner sc = new Scanner(System.in);
-		String pass = sc.next();
-		
-		System.out.println(char_check(pass));
-		System.out.println(length_check(pass));
-
+	public static boolean getStrength(String username, String pass) {
+		if ((length_check(pass) && username(pass, username)) && char_check(pass)) {
+			return true;
+		}
+		return false;
 	}
 
 	private static boolean char_check(String pass) {
-		boolean upp = false;
-		boolean low = false;
-		boolean sp = false;
-		boolean num = false;
-
-		boolean f = false;
+		
 
 		for (int i = 0; i < pass.length(); i++) {
 			char ch = pass.charAt(i);
@@ -39,10 +45,12 @@ public class logic {
 				sp = true;
 			}
 		}
-		if ((upp == true && low == true) && (sp == true && num == true)) {
+		boolean f = false;
+		if ((upp && low) && (sp && num)) {
 			f = true;
 		}
 		return f;
+
 	}
 
 	private static boolean length_check(String pass) {
@@ -51,6 +59,11 @@ public class logic {
 			return true;
 		}
 		return false;
+	}
+
+	private static boolean username(String pass, String name) {
+		return !pass.toLowerCase().contains(name.toLowerCase());
+
 	}
 
 }
