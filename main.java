@@ -25,14 +25,17 @@ public class main {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
-            boolean stregth = Logic.checkStregth(password, username)
+            boolean stregth = false;
 
             if (!stregth) {
 
-                String suggestion = Suggest.getSuggestion(password);
+                String[] suggestion = Suggest.getSuggestions(username, password);
 
                 JOptionPane.showMessageDialog(null,
-                        "Weak Password ❌\n" + suggestion,
+                        "Weak Password ❌\n\nTry these:\n\n"
+                        + "1. " + suggestion[0] + "\n"
+                        + "2. " + suggestion[1] + "\n"
+                        + "3. " + suggestion[2],
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
 

@@ -7,57 +7,69 @@ public class Suggest {
     static String numbers = "0123456789";
     static String special = "!@#$%^&*";
 
-    static String all = upper + lower + numbers + special;
-
-    public static String[] getSuggestions(String username) {
+    public static String[] getSuggestions(String username, String password) {
 
         String[] suggestions = new String[3];
 
         for (int i = 0; i < 3; i++) {
-            suggestions[i] = generatePassword(username);
+            suggestions[i] = upgradePassword(username, password);
         }
 
         return suggestions;
     }
 
-    private static String generatePassword(String username) {
+    private static String upgradePassword(String username, String password) {
 
         Random rand = new Random();
-        StringBuilder password = new StringBuilder();
+        StringBuilder upgraded = new StringBuilder(password);
 
-        password.append(upper.charAt(rand.nextInt(upper.length())));
-        password.append(lower.charAt(rand.nextInt(lower.length())));
-        password.append(numbers.charAt(rand.nextInt(numbers.length())));
-        password.append(special.charAt(rand.nextInt(special.length())));
-
-        int remaining = 8 + rand.nextInt(5) - 4; 
-        for (int i = 0; i < remaining; i++) {
-            password.append(all.charAt(rand.nextInt(all.length())));
+        // Remove username if present
+        if (upgraded.toString().toLowerCase().contains(username.toLowerCase())) {
+            upgraded = new StringBuilder(
+                upgraded.toString().replaceAll("(?i)" + username, "")
+            );
         }
 
-        char[] chars = password.toString().toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            int j = rand.nextInt(chars.length);
-            char temp = chars[i];
-            chars[i] = chars[j];
-            chars[j] = temp;
+        // Add missing rules
+        if (!upgraded.toString().matches(".*[A-Z].*")) {
+            upgraded.insert(rand.nextInt(upgraded.length()+1),
+                    upper.charAt(rand.nextInt(upper.length())));
         }
 
-        String finalPass = new String(chars);
-
-        if (finalPass.toLowerCase().contains(username.toLowerCase())) {
-            return generatePassword(username);
+        if (!upgraded.toString().matches(".*[a-z].*")) {
+            upgraded.insert(rand.nextInt(upgraded.length()+1),
+                    lower.charAt(rand.nextInt(lower.length())));
         }
 
-        return finalPass;
+        if (!upgraded.toString().matches(".*[0-9].*")) {
+            upgraded.insert(rand.nextInt(upgraded.length()+1),
+                    numbers.charAt(rand.nextInt(numbers.length())));
+        }
+
+        if (!upgraded.toString().matches(".*[^a-zA-Z0-9].*")) {
+            upgraded.insert(rand.nextInt(upgraded.length()+1),
+                    special.charAt(rand.nextInt(special.length())));
+        }
+
+        // Ensure length >= 8
+        while (upgraded.length() < 8) {
+            upgraded.insert(rand.nextInt(upgraded.length()+1),
+                    allChars().charAt(rand.nextInt(allChars().length())));
+        }
+
+        return upgraded.toString();
     }
 
-    public static void main(String[] args){
-    String[] arr = getSuggestions("shivansh123");
+    private static String allChars() {
+        return upper + lower + numbers + special;
+    }
 
-    for (String s : arr) {
-        System.out.println(s);
-        
+    // test
+    public static void main(String[] args) {
+        String[] arr = getSuggestions("shivansh", "shiv123");
+
+        for (String s : arr) {
+            System.out.println(s);
         }
     }
 }
