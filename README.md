@@ -43,10 +43,10 @@ password_checker/
 
 ## How to Run
 
-Compile the files:
+Compile the file:
 
 ```
-javac main.java Suggest.java logic.java
+javac main.java 
 ```
 
 Run the application:
@@ -64,21 +64,6 @@ java main
   - Generates and shows improved password suggestions
 - If strong:
   - Confirms successful validation
-
-## Example Output
-
-```
-Weak Password
-
-Issues:
-- Missing uppercase letter
-- Missing special character
-
-Suggestions:
-1. shiv1A2@
-2. sHiv123#
-3. sh!v123A
-```
 
 ## Design Notes
 
